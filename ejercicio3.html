@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ejercicio 3</title>
+
+    <link rel="stylesheet" href="ejercicio3.css">
+</head>
+<body>
+    <section class="sectionLeft">
+		<img src="./cesticom.png" alt="Logo cesticom">
+		<h1>EJERCICIO N°3 DE LA PRUEBA TÉCNICA PARA CESTICOM</h1>
+		<p> <strong> Generar un array con 20.000 números.</strong>
+			A través de una vista, el usuario podrá visualizar
+			<strong>
+				la media,
+				múltiplos de 2 y
+				múltiplos de 3,
+			</strong>
+			esto, al hacer click en cualquiera de los botones para realizar dichos cálculos.
+		</p>
+	</section>
+	<section class="sectionRigth">
+		<input type="number" id="inputN" value="20000" max="20000">
+		<div class="botones" id="botones">
+
+
+			<button type="button" class="boton-calcularMediana" id="boton-calcularMediana">Calcular Mediana</button>
+
+
+			<button type="button" class="boton-calcularPromedio" id="boton-calcularPromedio">Calcular Promedio</button>
+
+
+			<button type="button" class="boton-multiplos2" id="boton-multiplos2">Múltiplos de 2</button>
+
+
+			<button type="button" class="boton-multiplos3" id="boton-multiplos3">Múltiplos de 3</button>
+		</div>
+
+
+		<div class="vista" id="vista">
+			<template>
+				<div class="template"></div>
+			</template>
+		</div>
+
+	</section>
+
+    <script src="ejercicio3.js"></script>
+</body>
+</html>

@@ -1,0 +1,101 @@
+*{
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+    font-family: Consolas;
+    color: #363636;
+}
+body{
+    display: flex;
+    flex-wrap: wrap;
+}
+section{
+    padding: 80px;
+    height: 100vh;
+    width: 50%;
+}
+.sectionLeft{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-image: linear-gradient(180deg, #ffffff 0, #ffffff 16.67%, #ffffff 33.33%, #ffffff 50%, #f3ebed 66.67%, #e8dadf 83.33%, #dfcdd5 100%);
+}
+.sectionLeft img{
+    width: 30%;
+    margin-bottom: 40px;
+}
+.sectionLeft h1{
+    font-size: 32px;
+    margin-bottom: 40px;
+    text-align: center;
+}
+.sectionLeft .botones{
+    align-content: center;
+}
+.sectionLeft p{
+    font-size: 20px;
+    text-align: justify;
+}
+.sectionRigth{
+    background-image: linear-gradient(180deg, #ffb645 0, #ffa63b 16.67%, #fd932f 33.33%, #f37b1f 50%, #e86211 66.67%, #e04b0b 83.33%, #db330f 100%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.sectionRigth input{
+    font-size: 48px;
+    font-weight: 700;
+    margin-bottom: 40px;
+    border: none;
+    background-color: #00000000;
+    text-align: center;
+}
+.sectionRigth input:focus {
+    border: none;
+    outline: none;
+    box-shadow: none;
+    color: white;
+}
+.sectionRigth .botones{
+    display: flex;
+    margin-bottom: 40px;
+}
+.sectionRigth .botones button{
+    padding: 8px;
+    margin: 10px;
+    border-radius: 4px;
+    background-image: linear-gradient(180deg, #ffffff 0, #ffffff 16.67%, #ffffff 33.33%, #ffffff 50%, #f3ebed 66.67%, #e8dadf 83.33%, #dfcdd5 100%);
+    border: none;
+    transition: all .3s;
+}
+.sectionRigth .botones button:hover {
+    box-shadow: 4px 0px 24px -7px #000000bf;
+    color: #ff4901;
+    font-weight: bolder;
+}
+
+
+.vista{
+    font-size: 1.4rem;
+    font-weight: bold;
+    color: #FFF;
+    display: flex;
+    flex-wrap: wrap;
+    overflow-y: scroll;
+}
+.vista::-webkit-scrollbar{
+    background: #535353;
+    border-radius: 4px;
+    width: 4px;
+}
+.vista::-webkit-scrollbar-button{
+    background-color: #db330f;
+}
+.vista::-webkit-scrollbar-thumb{
+    background-color: #db330f;
+}
+.vista div{
+    margin: 8px;
+    align-items: center;
+}
