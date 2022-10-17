@@ -50,6 +50,7 @@ section{
     border: none;
     background-color: #00000000;
     text-align: center;
+    cursor: pointer;
 }
 .sectionRigth input:focus {
     border: none;
