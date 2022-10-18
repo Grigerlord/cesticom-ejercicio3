@@ -54,43 +54,37 @@ let mlt3 = 0;
 
 
 
-//FUNCIONES NECESARIAS EN LA APLICACION
+//FUNCIONES NECESARIAS EN LA APLICACIÓN
 //________________________________________
 
 
-
-
-//FUNCION QUE CALCULA EL PROMEDIO
+//FUNCIÓN QUE CALCULA EL PROMEDIO
 const calcularPromedio = (list) => { //RECIBE EL ARRAY
     return list.reduce((a, b) => a + b) / list.length //SUMA CADA ELEMENTO Y DIVIDE EL RESULTADO ENTRE LA CANTIDAD DE ELEMENTOS EN EL ARRAY
 }
 
-
 //FUNCIÓN QUE CALCULA UN MÚLTIPLO.
 const calcularMultiplo = (num, n) => num * n; //CALCULA LOS MULTIPLOS DE n NÚMERO(2 Y 3), MULTIPLICANDOLO POR 1 EN ADELANTE
 
-const esMultiplo = ( elemento ) => {
-    return elemento
+const esMultiplo = ( elemento, mult ) => elemento % mult === 0 //CALCULA SI UN NUMERO (elemento) ES MULTIPLO DE OTRO (mult)
+
+//FUNCIÓN QUE GENERA UN TEMPLATE
+function templateNumbers(elemento) { //ESTO, PARA GENERAR TANTAS CAJAS HTML SEAN NECESARIAS, MAS SU VALOR. RECIBE ESTE VALOR
+    const div = document.createElement('div') //CREA EL ELEMENTO HTML
+    const text = document.createTextNode(elemento) //CONVIERTE EL ELEMENTO RECIBIDO EN TEXTO
+    div.append(text) //INCLUYE EL TEXTO DENTRO DEL ELEMENTO HTML
+    vistaResul.append(div) //INCLUYE EL NUEVO ELEMENTO HTML CON SU TEXTO DENTRO DEL DOM
 }
 
-//FUNCION QUE GENERA UN TEMPLATE
-function templateNumbers(elemento) {
-    const div = document.createElement('div')
-    const text = document.createTextNode(elemento)
-    div.append(text)
-    vistaResul.append(div)
-}
-
-
-//FUNCION QUE RENDERIZA UNA LISTA DE MÚLTIPLOS EN PANTALLA
+//FUNCIÓN QUE RENDERIZA UNA LISTA DE MÚLTIPLOS EN PANTALLA
 const mostrarMultiplos = (mlt) => {
     if (inputValue <= 20000) { //ESTABLECEMOS EL LÍMITE EN 20.000. SINO, RETORNA UNA ALERTA
         vistaResul.innerHTML = '' //LIMPIAMOS LA CAJA HTML PARA LA VISTA DE PROMEDIOS Y MEDIANA
         boxPromMed.style.display = 'none' //LIMPIAMOS LA CAJA HTML PARA LA VISTA DE MÚLTIPLOS
         for (let i = 1; i <= inputValue; i++) { //CICLO QUE SE EJECUTA TANTOS ELEMENTOS CONTIENE EL VALOR EN EL IMPUT
-            const mltAct = calcularMultiplo(mlt, i) //LLAMADO A LA FUNCION QUE CALCULA EL MULTIPLO, Y GUARDADO EN UN MULTIPLO ACTUAL
+            const mltAct = calcularMultiplo(mlt, i) //LLAMADO A LA FUNCIÓN QUE CALCULA EL MULTIPLO, Y GUARDADO EN UN MULTIPLO ACTUAL
             if (mltAct <= inputValue) { //CONDICIONAL CON EL FIN DE DETENER LA EJECUCIÓN DEL CICLO EN CUANTO EL VALOR DEL MULTIPLO SOBREPASE EL VALOR DEL INPUT
-                templateNumbers(mltAct) //TEMPLATE CREADO PARA GENERAR HTML Y MOSTRAR UNA LISTA CON CADA 
+                templateNumbers(mltAct) //TEMPLATE CREADO PARA GENERAR HTML Y MOSTRAR UNA LISTA CON CADA ELEMENTO
             } else {
                 break
             }
@@ -100,7 +94,7 @@ const mostrarMultiplos = (mlt) => {
     }
 }
 
-//FUNCION PARA MOSTRAR ERROR AL ESTABLECER UN NUMERO FUERA DEL RANGO 1 al 20.000
+//FUNCIÓN PARA MOSTRAR ERROR AL ESTABLECER UN NÚMERO FUERA DEL RANGO 1 al 20.000
 const mensajeDeError = () => {
     boxPromMed.style.display = 'none'
     vistaResul.innerText = '! Fuera de rango'
@@ -131,22 +125,35 @@ const mensajeDeError = () => {
 //_____________________________________________
 botonMedia.addEventListener('click', () => {
     if (inputValue <= 20000) {
-        if (array.length % 2 === 0) { // SI EL NUMERO A EVALUAR ES UN NUMERO PAR
+        if (array.length % 2 === 0) { // SI EL NÚMERO A EVALUAR ES UN NÚMERO PAR
+            generarArray(inputValue)
+            array.sort((a, b) => a - b)
             boxPromMed.style.display = 'block'
             vistaResul.innerHTML = ''
             let division = array.length / 2 
-            elementosCentrales = array.filter( (el) => el === division || el === division + 1)
-            boxPromMed.innerHTML = `La mediana de la lista de números del 1 al ${inputValue} es: ${calcularPromedio(elementosCentrales)}`
+            elementosCentrales = array.slice(division, division + 2)
+            boxPromMed.innerHTML = `La mediana de la lista generada con ${inputValue} elementos es: ${calcularPromedio(elementosCentrales)}`
         } else{
             boxPromMed.style.display = 'block' 
             vistaResul.innerHTML = ''
-            mediana = array.filter( (el) => el === (array.length + 1) / 2 ) //FUNCION QUE CALCULA LA MEDIANA
-            boxPromMed.innerHTML = `La mediana de la lista de números del 1 al ${inputValue} es: ${mediana}`
+            array.sort((a, b) => a - b)
+            mediana = ((array.length + 1) / 2) + 1
+            boxPromMed.innerHTML = `La mediana de la lista generada con ${inputValue} elementos es: ${mediana}`
         }
     } else {
         mensajeDeError()
     }
 })
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -162,12 +169,22 @@ botonProme.addEventListener('click', () => {
     boxPromMed.style.display = 'block'
     vistaResul.innerHTML = ''
     if (inputValue <= 20000) {
+        generarArray(inputValue)
         let promedio = calcularPromedio(array)
-        boxPromMed.innerHTML = `El promedio de la lista de números del 1 al ${inputValue} es: ${promedio}`
+        boxPromMed.innerHTML = `El promedio de la lista generada con ${inputValue} elementos, es: ${promedio}`
     } else {
         mensajeDeError()
     }
 })
+
+
+
+
+
+
+
+
+
 
 
 
@@ -178,6 +195,18 @@ botonMult2.addEventListener('click', () => {
     //2 HARDCODEADO. PUDIERA SER AUTOMATIZADO
     mostrarMultiplos(2) //ENVIAMOS EL MULTIPLO QUE QUEREMOS QUE SE OBTENGA DE LA LISTA
 })
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
