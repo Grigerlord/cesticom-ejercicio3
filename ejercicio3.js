@@ -19,7 +19,6 @@ const generarArray = (valor) => { //GUARDA EN EL ARRAY UNA CANTIDAD DE VALORES R
         array.push(numAleatorio) //EN CADA ITERACION AGREGA EL NUMERO ALEATORIO ANTES GENERADO
     }
 }
-generarArray(inputValue) //EJECUTA LA FUNCION ANTERIOR.
 
 input.addEventListener('change', () => { //ESCUCHA CADA CAMBIO REALIZADO EN EL INPUT Y MODIFICA EL VALOR DEL ARRAY
     array = [] //LIMPIA EL ARRAY
@@ -35,11 +34,10 @@ const botonMult2 = $('#boton-multiplos2')
 const botonMult3 = $('#boton-multiplos3')
 const boxPromMed = $('#promedio-mediana')
 const vistaResul = $('#vista')
-const templateNm = $('template')
 
 
 //VARIABLES NECESARIAMENTE GLOBALES
-let mediana = 0
+let mltAct = 0
 let mlt2 = 0;
 let mlt3 = 0;
 
@@ -63,38 +61,38 @@ const calcularPromedio = (list) => { //RECIBE EL ARRAY
     return list.reduce((a, b) => a + b) / list.length //SUMA CADA ELEMENTO Y DIVIDE EL RESULTADO ENTRE LA CANTIDAD DE ELEMENTOS EN EL ARRAY
 }
 
-//FUNCIÓN QUE CALCULA UN MÚLTIPLO.
-const calcularMultiplo = (num, n) => num * n; //CALCULA LOS MULTIPLOS DE n NÚMERO(2 Y 3), MULTIPLICANDOLO POR 1 EN ADELANTE
-
-const esMultiplo = ( elemento, mult ) => elemento % mult === 0 //CALCULA SI UN NUMERO (elemento) ES MULTIPLO DE OTRO (mult)
-
 //FUNCIÓN QUE GENERA UN TEMPLATE
-function templateNumbers(elemento) { //ESTO, PARA GENERAR TANTAS CAJAS HTML SEAN NECESARIAS, MAS SU VALOR. RECIBE ESTE VALOR
+const generarTemplate = (elem, box) => { //ESTO, PARA GENERAR TANTAS CAJAS HTML SEAN NECESARIAS, MAS SU VALOR. RECIBE ESTE VALOR, Y EL ELEMENTO DOM DONDE SE INTRODUCIRÁ
     const div = document.createElement('div') //CREA EL ELEMENTO HTML
-    const text = document.createTextNode(elemento) //CONVIERTE EL ELEMENTO RECIBIDO EN TEXTO
+    const text = document.createTextNode(elem) //CONVIERTE EL ELEMENTO RECIBIDO EN TEXTO
     div.append(text) //INCLUYE EL TEXTO DENTRO DEL ELEMENTO HTML
-    vistaResul.append(div) //INCLUYE EL NUEVO ELEMENTO HTML CON SU TEXTO DENTRO DEL DOM
+    box.append(div) //INCLUYE EL NUEVO ELEMENTO HTML CON SU TEXTO DENTRO DEL DOM
 }
 
 //FUNCIÓN QUE RENDERIZA UNA LISTA DE MÚLTIPLOS EN PANTALLA
-const mostrarMultiplos = (mlt) => {
+const mostrarMultiplos = (lista, mult) => {
     if (inputValue <= 20000) { //ESTABLECEMOS EL LÍMITE EN 20.000. SINO, RETORNA UNA ALERTA
         vistaResul.innerHTML = '' //LIMPIAMOS LA CAJA HTML PARA LA VISTA DE PROMEDIOS Y MEDIANA
-        boxPromMed.style.display = 'none' //LIMPIAMOS LA CAJA HTML PARA LA VISTA DE MÚLTIPLOS
-        for (let i = 1; i <= inputValue; i++) { //CICLO QUE SE EJECUTA TANTOS ELEMENTOS CONTIENE EL VALOR EN EL IMPUT
-            const mltAct = calcularMultiplo(mlt, i) //LLAMADO A LA FUNCIÓN QUE CALCULA EL MULTIPLO, Y GUARDADO EN UN MULTIPLO ACTUAL
-            if (mltAct <= inputValue) { //CONDICIONAL CON EL FIN DE DETENER LA EJECUCIÓN DEL CICLO EN CUANTO EL VALOR DEL MULTIPLO SOBREPASE EL VALOR DEL INPUT
-                templateNumbers(mltAct) //TEMPLATE CREADO PARA GENERAR HTML Y MOSTRAR UNA LISTA CON CADA ELEMENTO
-            } else {
-                break
-            }
-        }       
+        boxPromMed.style.display = 'block' //OCULTA LA CAJA HTML PARA LA VISTA DE MÚLTIPLOS
+
+        const listaDeMultiplos = lista.filter(e => e % mult === 0)
+
+        boxPromMed.innerHTML = `Estos son los multiplos de ${mult}, contenidos en la lista generada con ${inputValue} elementos:`
+        mostrarElementosEnVistaResult(listaDeMultiplos)
+        
     } else { //MENSAJES DE ERROR
         mensajeDeError()
     }
 }
 
-//FUNCIÓN PARA MOSTRAR ERROR AL ESTABLECER UN NÚMERO FUERA DEL RANGO 1 al 20.000
+const mostrarElementosEnVistaResult = (lista) => {
+    lista.forEach( e => generarTemplate(e, vistaResul) )
+}
+const mostrarElementosEnBoxPromMed = (lista) => {
+    lista.forEach( e => generarTemplate(e, boxPromMed) )
+}
+
+//FUNCIÓN PARA MOSTRAR ERROR AL ESTABLECER UN NÚMERO FUERA DEL RANGO DEL 1 al 20.000
 const mensajeDeError = () => {
     boxPromMed.style.display = 'none'
     vistaResul.innerText = '! Fuera de rango'
@@ -126,19 +124,23 @@ const mensajeDeError = () => {
 botonMedia.addEventListener('click', () => {
     if (inputValue <= 20000) {
         if (array.length % 2 === 0) { // SI EL NÚMERO A EVALUAR ES UN NÚMERO PAR
-            generarArray(inputValue)
-            array.sort((a, b) => a - b)
+            generarArray(inputValue) // MODIFICA EL ARRAY
+            array.sort((a, b) => a - b) //ORDENA EL ARRAY EN ORDEN ASCENDENTE
             boxPromMed.style.display = 'block'
-            vistaResul.innerHTML = ''
             let division = array.length / 2 
             elementosCentrales = array.slice(division, division + 2)
-            boxPromMed.innerHTML = `La mediana de la lista generada con ${inputValue} elementos es: ${calcularPromedio(elementosCentrales)}`
-        } else{
-            boxPromMed.style.display = 'block' 
+            boxPromMed.innerHTML = `La mediana de la lista generada con ${inputValue} elementos aleatorios es: <strong>${calcularPromedio(elementosCentrales)}</strong>`
             vistaResul.innerHTML = ''
-            array.sort((a, b) => a - b)
-            mediana = ((array.length + 1) / 2) + 1
-            boxPromMed.innerHTML = `La mediana de la lista generada con ${inputValue} elementos es: ${mediana}`
+            mostrarElementosEnVistaResult(array)
+        } else{ //CUANDO EL NÚMERO A EVALUAR ES UN NÚMERO IMPAR
+            boxPromMed.style.display = 'block' 
+            generarArray(inputValue) // MODIFICA EL ARRAY
+            array.sort((a, b) => a - b) //ORDENA EL ARRAY EN ORDEN ASCENDENTE
+            let posicionCentral = ((array.length + 1) / 2) // GUARDAMOS LA POSICIÓN CENTRAL DEL ARRAY
+            let mediana = array[posicionCentral - 1] // LA MEDIANA SERÁ EL ELEMENTO A LA MITAD DEL ARRAY
+            boxPromMed.innerHTML = `La mediana de la lista generada con ${inputValue} elementos aleatorios es: <strong>${mediana}</strong>`
+            vistaResul.innerHTML = ''
+            mostrarElementosEnVistaResult(array)
         }
     } else {
         mensajeDeError()
@@ -162,7 +164,7 @@ botonMedia.addEventListener('click', () => {
 
 
 
-//MOSTRAR EL PROMEDIO DE LA LISTA DE NUMEROS GENERADA SEGÚN EL VALOR DEL INPUT
+//MOSTRAR EL PROMEDIO DE LA LISTA DE NÚMEROS GENERADA SEGÚN EL VALOR DEL INPUT
 //_____________________________________________
 
 botonProme.addEventListener('click', () => {
@@ -171,7 +173,8 @@ botonProme.addEventListener('click', () => {
     if (inputValue <= 20000) {
         generarArray(inputValue)
         let promedio = calcularPromedio(array)
-        boxPromMed.innerHTML = `El promedio de la lista generada con ${inputValue} elementos, es: ${promedio}`
+        boxPromMed.innerHTML = `El promedio de la lista generada con ${inputValue} elementos, es: <strong>${promedio}</strong>`
+        mostrarElementosEnVistaResult(array)
     } else {
         mensajeDeError()
     }
@@ -193,7 +196,8 @@ botonProme.addEventListener('click', () => {
 //_____________________________________________
 botonMult2.addEventListener('click', () => {
     //2 HARDCODEADO. PUDIERA SER AUTOMATIZADO
-    mostrarMultiplos(2) //ENVIAMOS EL MULTIPLO QUE QUEREMOS QUE SE OBTENGA DE LA LISTA
+    generarArray(inputValue)
+    mostrarMultiplos(array, 2) //ENVIAMOS LA LISTA DE ELEMENTOS Y EL MULTIPLO HARDCODEADO
 })
 
 
@@ -215,5 +219,6 @@ botonMult2.addEventListener('click', () => {
 //_____________________________________________
 botonMult3.addEventListener('click', () => {
     //3 HARDCODEADO. PUDIERA SER AUTOMATIZADO
-    mostrarMultiplos(3) //ENVIAMOS EL MULTIPLO QUE QUEREMOS QUE SE OBTENGA DE LA LISTA
+    generarArray(inputValue)
+    mostrarMultiplos(array, 3) //ENVIAMOS LA LISTA DE ELEMENTO Y EL MULTIPLO HARDCODEADO
 })
