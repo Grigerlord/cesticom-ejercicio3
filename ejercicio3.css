@@ -10,7 +10,7 @@ body{
     flex-wrap: wrap;
 }
 section{
-    padding: 8%;
+    padding: 6%;
     height: 100vh;
     width: 50%;
 }
@@ -113,4 +113,9 @@ section{
 .vista div{
     margin: 8px;
     align-items: center;
+}
+
+.promedio-mediana{
+    background-color: #dfcdd500;
+    font-size: 2.5rem;
 }
